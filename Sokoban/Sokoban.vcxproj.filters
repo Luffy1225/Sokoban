@@ -18,5 +18,43 @@
     <ClCompile Include="main.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Tools.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="World.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Tools.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
