@@ -1,5 +1,13 @@
 #pragma once
-class Obstacle
+#include "Block.h"
+
+class Obstacle : public Block
 {
+private:
+
+
+public:
+
+
 };
 

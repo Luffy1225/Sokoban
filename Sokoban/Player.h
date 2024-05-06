@@ -1,5 +1,14 @@
 #pragma once
-class Player
+#include "Block.h"
+
+class Player 
 {
+private:
+
+
+public:
+
+
+
 };
 
