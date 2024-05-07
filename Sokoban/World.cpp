@@ -1,5 +1,9 @@
 #include "World.h"
 #include <string>
+#include <fstream> 
+#include <iostream>
+
+using namespace std;
 
 World::World() {
 
@@ -16,14 +20,30 @@ void World::end(){
 void World::restart(){
 }
 
-void World::loadmap(){
+bool World::loadmap(){
 
     string index;
     index = to_string(level);
 
     string filename = "mission" + index + "txt";
 
-
+	ifstream file(filename);
+	
+	if(file.fail()){
+		cout << "Can't open the file : \"" + filename + "\"" << endl;
+	}
+	else{
+			 
+		cin >> row >> col ;
+		
+		for(int i = 0 ; i< row ; i++){
+			for(int j = 0 j < col ; j++){
+				char ch;
+				cin >> ch;
+				map[i][j] = ch; 
+			}
+		}
+	}
 
 }
 
@@ -37,4 +57,15 @@ void World::mapReset() {
     }
     map.clear();
 }
+
+
+void World::printmap(){
+	for(int i = 0 ; i < row ; i++){
+		for(int j = 0 ; j < col ; j++){
+			cout << map[i][j] ;
+		}
+		cout << endl;
+	}
+}
+
 

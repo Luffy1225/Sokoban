@@ -12,7 +12,9 @@ private:
 
 	vector<string> shape;
 	int sizeOfBlock;
-
+	int pos_x;
+	int pos_y;
+		
 
 public:
 
