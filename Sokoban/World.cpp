@@ -25,7 +25,7 @@ bool World::loadmap(){
     string index;
     index = to_string(level);
 
-    string filename = "mission" + index + "txt";
+    string filename = "mission" + index + ".txt";
 
 	ifstream file(filename);
 	
