@@ -26,10 +26,12 @@ public:
 	
 	
 	void intro();
+	void nextLevel();
 	void end();
 	void restart();
 
-	void loadmap();
+	bool loadmap();
+	void printOriginmap();
 	void printmap();
 	
 

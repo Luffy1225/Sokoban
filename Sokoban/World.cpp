@@ -6,7 +6,10 @@
 using namespace std;
 
 World::World() {
+	level = 1; // start with level one
+	col, row = 0;
 
+	cout << "World Initial" << endl;
 }
 void World::draw(){
 }
@@ -22,27 +25,36 @@ void World::restart(){
 
 bool World::loadmap(){
 
+
+	string prefix = ""; // C:// ¤§Ãþªº
+
     string index;
     index = to_string(level);
 
-    string filename = "mission" + index + ".txt";
+    string filename = prefix + "mission" + index + ".txt";
 
-	ifstream file(filename);
-	
-	if(file.fail()){
+	ifstream file(filename , ios::in);
+	//std::ifstream file("mission1.txt");
+
+	if(!file){
 		cout << "Can't open the file : \"" + filename + "\"" << endl;
+		return false;
+		
 	}
 	else{
 			 
-		cin >> row >> col ;
-		
+		file >> row >> col ;
+		map.resize(row, vector<char>(col));
+
+
 		for(int i = 0 ; i< row ; i++){
-			for(int j = 0 j < col ; j++){
+			for (int j = 0; j < col; j++) {
 				char ch;
-				cin >> ch;
+				file >> ch;
 				map[i][j] = ch; 
 			}
 		}
+		return true;
 	}
 
 }
@@ -59,7 +71,7 @@ void World::mapReset() {
 }
 
 
-void World::printmap(){
+void World::printOriginmap(){
 	for(int i = 0 ; i < row ; i++){
 		for(int j = 0 ; j < col ; j++){
 			cout << map[i][j] ;
@@ -68,4 +80,8 @@ void World::printmap(){
 	}
 }
 
+
+void World::nextLevel() {
+	level++;
+}
 

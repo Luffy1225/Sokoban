@@ -1,11 +1,25 @@
 ﻿#include <string>
 #include <iostream>
+#include "World.h"
+
+
 
 using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
+
+    World  myWorld;
+    myWorld.loadmap();
+    myWorld.printOriginmap();
+    myWorld.nextLevel();
+
+    myWorld.loadmap();
+    myWorld.printOriginmap();
+    myWorld.nextLevel();
+
+    myWorld.loadmap();
+    myWorld.printOriginmap();
 
 
     return 0;
