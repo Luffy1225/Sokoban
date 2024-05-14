@@ -10,6 +10,7 @@ int main()
 {
 
     World  myWorld;
+    myWorld.start();
     myWorld.loadmap();
     myWorld.printOriginmap();
     myWorld.nextLevel();

@@ -8,8 +8,7 @@ using namespace std;
 
 class Block
 {
-private:
-
+protected:
 	vector<string> shape;
 	int sizeOfBlock;
 	int pos_x;

@@ -1,5 +1,11 @@
 #pragma once
 #include <windows.h>
+#include <chrono>
+#include <iostream>
+#include <thread>
+#include <conio.h>
+
+
 
 enum Color {
 	reset = 7,
@@ -21,6 +27,10 @@ public:
 
 	// ÃC¦â
 	static void SetColor(int color = 7);
+
+	//©µ¿ð
+	static void sleepMilsec(int milsec);
+
 
 };
 

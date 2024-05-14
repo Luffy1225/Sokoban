@@ -1,5 +1,4 @@
 #include "Tools.h"
-#include <windows.h>
 
 
 COORD Tools::getCursorPosition(HANDLE hConsoleOutput) {
@@ -31,4 +30,8 @@ void Tools::SetColor(int color)
     HANDLE hConsole;
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, color);
+}
+
+void Tools::sleepMilsec(int milsec) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(milsec));
 }
