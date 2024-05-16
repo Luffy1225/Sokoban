@@ -6,8 +6,9 @@ private:
 
 public:
 
+	Box(int x, int y);
 
-
+	
 
 };
 

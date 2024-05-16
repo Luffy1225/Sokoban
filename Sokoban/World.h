@@ -19,19 +19,26 @@ private:
 	
 	
 	int level;
-	
+	int times;
 
 	void mapReset();
 
 public:
 
 	World();
+
+
+	//顯示
+	void drawUI();
+	void showstate(string state);
+
 	void draw();
 	void update();
 
 
 	//遊戲機制
 	void start();
+	void play();
 	void intro();
 	void nextLevel();
 	void end();

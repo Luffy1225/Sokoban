@@ -2,6 +2,8 @@
 #include <string>
 #include <fstream> 
 #include <iostream>
+#include <iomanip>
+
 
 enum icon {
 	player = '0',
@@ -17,7 +19,8 @@ using namespace std;
 
 World::World() {
 	level = 1; // start with level one
-	col, row = 0;
+	times = 0; //步數
+	col = 0, row = 0;
 
 	cout << "World Initial" << endl;
 }
@@ -38,9 +41,16 @@ void World::intro(){
 
 void World::start() {
 	intro();
+	drawUI();
+	showstate("遊戲開始");
+
+	play();
+
+}
+
+void World::play() {
 	loadmap();
-
-
+	drawUI();
 }
 
 
@@ -86,8 +96,10 @@ bool World::loadmap(){
 
 				switch (ch)
 				{
-				case '0':
+				case icon::player:
 					player.playerSetXYPos(row, col);
+					//map.push_back(new Player(row, col));
+					map[i][j] = new Player(row, col);
 					break;
 
 				case '1':
@@ -121,17 +133,18 @@ void World::mapReset() {
 void World::printOriginmap(){
 	for(int i = 0 ; i < row ; i++){
 		for(int j = 0 ; j < col ; j++){
-			//cout << map[i][j] ;
+			cout << charmap[i][j] ;
 		}
 		cout << endl;
 	}
 }
-
-
 void World::nextLevel() {
 	level++;
-}
+	system("cls");
+	loadmap();
+	play();
 
+}
 
 
 void World::playerUp() {
@@ -178,3 +191,19 @@ void World::playerRight() {
 }
 
  
+void World::drawUI() {
+	// gotoxy ui列
+	cout << " ======================================================= " << endl
+		<< "| 倉庫番                           行走步數: " << std::setw(5) << right << times << " 步" << "   |" << endl
+		<< "|                                                       |" << endl
+		<< "| W : 上 , S : 下 , A : 左 , D : 右                     |" << endl
+		<< " ======================================================= " << endl
+		;
+}
+
+void World::showstate(string state) {
+	//goto 狀態位置
+	cout << "目前狀態: "  << state << endl;
+}
+
+

@@ -13,6 +13,8 @@ protected:
 	int sizeOfBlock;
 	int pos_x;
 	int pos_y;
+
+	virtual void print();
 		
 
 public:

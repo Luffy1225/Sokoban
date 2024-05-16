@@ -2,7 +2,13 @@
 
 
 Player::Player() {
+
 }
+
+Player::Player(int x, int y) {
+	playerSetXYPos( x,  y);
+}
+
 
 void Player::playerSetXYPos(int x, int y) {
 	pos_x = x;
