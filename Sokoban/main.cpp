@@ -11,7 +11,7 @@ int main()
 
     World  myWorld;
     myWorld.start();
-    myWorld.loadmap();
+    /*myWorld.loadmap();
     myWorld.printOriginmap();
     myWorld.nextLevel();
 
@@ -20,7 +20,7 @@ int main()
     myWorld.nextLevel();
 
     myWorld.loadmap();
-    myWorld.printOriginmap();
+    myWorld.printOriginmap();*/
 
 
     return 0;

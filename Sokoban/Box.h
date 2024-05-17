@@ -8,6 +8,8 @@ public:
 
 	Box(int x, int y);
 
+	void print() override;
+
 	
 
 };

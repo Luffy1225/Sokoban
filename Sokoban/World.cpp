@@ -4,17 +4,6 @@
 #include <iostream>
 #include <iomanip>
 
-
-enum icon {
-	player = '0',
-	wall = '/',
-	none = '-',
-	box = '1',
-	target = '2',
-};
-
-
-
 using namespace std;
 
 World::World() {
@@ -24,8 +13,17 @@ World::World() {
 
 	cout << "World Initial" << endl;
 }
-void World::draw(){
+
+
+void World::drawmap() {
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < col; j++) {
+			map[i][j]->print();
+		}
+		cout << endl;
+	}
 }
+
 void World::update(){
 }
 
@@ -50,7 +48,8 @@ void World::start() {
 
 void World::play() {
 	loadmap();
-	drawUI();
+	drawmap();
+
 }
 
 
@@ -59,63 +58,62 @@ void World::end(){
 void World::restart(){
 }
 
-bool World::loadmap(){
+bool World::loadmap() {
+	string index;
+	index = to_string(level);
 
+	string filename = "mission" + index + ".txt";
 
-	string prefix = ""; // C:// 之類的
+	ifstream file(filename, ios::in);
 
-    string index;
-    index = to_string(level);
-
-    string filename = prefix + "mission" + index + ".txt";
-
-	ifstream file(filename , ios::in);
-	//std::ifstream file("mission1.txt");
-
-	if(!file){
+	if (!file) {
 		cout << "Can't open the file : \"" + filename + "\"" << endl;
+
 		return false;
-		
 	}
-	else{
-			 
-		file >> row >> col ;
-		//map.resize(row, vector<char>(col));
+	else {
+
+		file >> row >> col;
 		charmap.resize(row, vector<char>(col));
-		//map.resize(row, vector<Block>(col));
 		map.resize(row, vector<Block*>(col));
 
-
-		for(int i = 0 ; i< row ; i++){
+		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				char ch;
 				file >> ch;
-				charmap[i][j] = ch; 
-
-
-
-				switch (ch)
-				{
-				case icon::player:
+				charmap[i][j] = ch;
+				
+				if (ch == Icon::player) {
 					player.playerSetXYPos(row, col);
-					//map.push_back(new Player(row, col));
 					map[i][j] = new Player(row, col);
-					break;
-
-				case '1':
-					break;
-				case '2':
-					break;
-				case '/':
-					break;
-				case '-':
-					break;
 				}
+				else if (ch == Icon::box) {
+					map[i][j] = new Box(row, col);
+					// 做一些處理箱子的操作
+				}
+				else if (ch == Icon::target) {
+					map[i][j] = new Target(row, col);
+					// 做一些處理目標的操作
+				}
+				else if (ch == Icon::obstacle) {
+					map[i][j] = new Obstacle(row, col);
+					// 做一些處理牆壁的操作
+				}
+				else if (ch == Icon::none) {
+					map[i][j] = new Block(row, col);
+					// 做一些處理空地的操作
+				}
+				else {
+					map[i][j] = nullptr;
+					showstate("Null pointer");
+					// 對於其他情況的預設處理
+				}
+
 			}
 		}
 		return true;
-	}
 
+	}
 }
 
 void World::moveBlockTo(int row, int col, Block) {
@@ -155,18 +153,18 @@ void World::playerUp() {
 
 	int above = x - 1;
 
-	if (above < 0 || charmap[x - 1][y] == icon::wall) { // (above < 0)超過map邊界 , (charmap[x - 1][y] == '/')遇到牆壁
+	if (above < 0 || charmap[x - 1][y] == Icon::obstacle) { // (above < 0)超過map邊界 , (charmap[x - 1][y] == '/')遇到牆壁
 		cout << "無法移動" << endl;
 		return;
 	}
 	
 
-	if ( charmap[x-1][y] == icon::none) { // 空地 可以往上
+	if ( charmap[x-1][y] == Icon::none) { // 空地 可以往上
 		char temp = charmap[x][y];
 		charmap[x][y] = charmap[x - 1][y];
 		charmap[x - 1][y] = temp;
 	}
-	else if (charmap[x - 1][y] == icon::box && charmap[x - 2][y] == icon::none) { // 如果上方是箱子 再檢查 箱子上方有沒有空間 
+	else if (charmap[x - 1][y] == Icon::box && charmap[x - 2][y] == Icon::none) { // 如果上方是箱子 再檢查 箱子上方有沒有空間 
 		// x-2    x-1
 		// x-1     x
 		// x      x-2

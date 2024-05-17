@@ -9,5 +9,9 @@ private:
 public:
 
 
+	Obstacle(int x, int y);
+
+	void print() override;
+
 };
 

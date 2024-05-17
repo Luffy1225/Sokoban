@@ -2,6 +2,10 @@
 #include <vector>
 #include "Block.h"
 #include "Player.h"
+#include "Box.h"
+#include "Obstacle.h"
+#include "Target.h"
+
 
 using namespace std;
 
@@ -32,7 +36,7 @@ public:
 	void drawUI();
 	void showstate(string state);
 
-	void draw();
+	void drawmap();
 	void update();
 
 

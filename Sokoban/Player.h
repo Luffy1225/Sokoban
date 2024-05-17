@@ -6,15 +6,12 @@ class Player : public Block
 private:
 
 
-
 public:
 	
 	Player();
 	Player(int x , int y);
 
-
-
-
+	void print() override;
 
 	int x();
 	int y();

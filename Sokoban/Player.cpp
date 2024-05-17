@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Tools.h"
 
 
 Player::Player() {
@@ -28,4 +29,11 @@ int Player::x() {
 }
 int Player::y() {
 	return pos_y;
+}
+
+void Player::print() {
+	Tools::SetColor(Col_blue);
+	cout << Icon::player;
+	Tools::SetColor(Col_RESET);
+
 }

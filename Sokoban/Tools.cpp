@@ -22,7 +22,7 @@ void Tools::gotoxy(int xpos, int ypos)
 
 COORD Tools::getpos() {
     return getCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE));
-    SetColor(red);
+    //SetColor(red);
 }
 
 void Tools::SetColor(int color)
