@@ -285,7 +285,9 @@ class Tools
 public:
 	// 位置設定
 	static COORD getCursorPosition(HANDLE hConsoleOutput);
-	static void  gotoxy(int xpos, int ypos);
+    static void  gotoXY(int xpos, int ypos);
+    static void  gotoX(int xpos);
+    static void  gotoY(int ypos);
 	static COORD getpos();
 
 	// 顏色
@@ -294,6 +296,10 @@ public:
 	//延遲
 	static void sleepMilsec(int milsec);
 
+    //光標
+    static void hideCursor();
+    static void showCursor();
+    
 
 };
 

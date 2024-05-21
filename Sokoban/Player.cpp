@@ -37,3 +37,10 @@ void Player::print() {
 	Tools::SetColor(Col_RESET);
 
 }
+
+void Player::playerAddX(int Xvalue) {
+	pos_x += Xvalue;
+}
+void Player::playerAddY(int Yvalue) {
+	pos_y += Yvalue;
+}

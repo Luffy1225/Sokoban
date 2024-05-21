@@ -23,7 +23,27 @@ private:
 	
 	
 	int level;
-	int times;
+	int steps;
+
+#pragma region UIsetting
+
+	int UI_main_X = 0;
+	int UI_main_Y = 1;
+
+	int UI_state_X = 0;
+	int UI_state_Y = 8;
+
+	int UI_map_X = 0;
+	int UI_map_Y = 10;
+
+
+#pragma endregion
+
+
+
+
+
+	bool running ;
 
 	void mapReset();
 
@@ -35,6 +55,9 @@ public:
 	//Εγ₯ά
 	void drawUI();
 	void showstate(string state);
+
+	void mainfresh();
+
 
 	void drawmap();
 	void update();
@@ -48,6 +71,8 @@ public:
 	void end();
 	void restart();
 	bool checkwin();
+	void celebrate();
+
 
 	bool loadmap();
 	void printOriginmap();

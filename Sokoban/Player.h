@@ -20,5 +20,9 @@ public:
 	void playerSet_Xpos(int );
 	void playerSet_Ypos(int );
 
+	void playerAddX(int Xvalue);
+	void playerAddY(int Yvalue);
+
+
 };
 

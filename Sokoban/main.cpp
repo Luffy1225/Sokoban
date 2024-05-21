@@ -9,19 +9,9 @@ using namespace std;
 int main()
 {
 
-    World  myWorld;
-    myWorld.start();
-    /*myWorld.loadmap();
-    myWorld.printOriginmap();
-    myWorld.nextLevel();
-
-    myWorld.loadmap();
-    myWorld.printOriginmap();
-    myWorld.nextLevel();
-
-    myWorld.loadmap();
-    myWorld.printOriginmap();*/
-
+    
+    World  Sokoban;
+    Sokoban.start();
 
     return 0;
 }
