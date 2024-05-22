@@ -12,7 +12,8 @@ int main()
     
     World  Sokoban;
     Sokoban.start();
-    Sokoban.end();
+
+    system("pause");
 
     return 0;
 }

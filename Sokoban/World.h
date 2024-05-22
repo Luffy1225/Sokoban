@@ -25,6 +25,8 @@ private:
 	int steps;
 	int stepsSum;
 
+
+	thread soundThread;
 #pragma region UIsetting
 
 	int UI_main_X;
@@ -52,10 +54,8 @@ public:
 
 	void mainfresh();
 
-
 	void drawmap();
 	void update();
-
 
 	//遊戲機制
 	void start();
@@ -82,6 +82,10 @@ public:
 	//地圖 
 	void createMap();
 
+
+	//音樂
+	void playBGM(const wstring& wfilename);
+	void stopBGM();
 
 };
 

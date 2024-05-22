@@ -1,12 +1,16 @@
 #include "World.h"
 #include "Tools.h"
-#include <string>
-#include <fstream> 
-#include <iostream>
-#include <iomanip>
-#include <conio.h>
-#include <fstream>
+#include <windows.h> // gotoxy
+#include <mmsystem.h> // playbgm 
+#include <conio.h> // keyboard in
+#include <string> // string
+#include <fstream>  // file
+#include <iostream> // io
+#include <iomanip> // io
+#include <thread> // thread
  
+#pragma comment(lib, "winmm.lib") //music
+
 #define LEVEL_AMOUNT 3
 
 using namespace std;
@@ -70,7 +74,11 @@ void World::intro(){ // 遊戲介紹
 void World::start() { // 遊戲開始位置
 
 	Tools::hideCursor();
+	wstring wfilename = L"sokoban.wav";
+	soundThread = thread(&World::playBGM, this, wfilename);
 
+	// 確保音樂已經開始播放
+	Sleep(100);
 	intro();
 	drawUI();
 	showstate("遊戲開始");
@@ -81,11 +89,11 @@ void World::start() { // 遊戲開始位置
 
 void World::play() { //遊玩主程式
 
-	loadmap();
-	drawmap();
-	drawUI();
-		
-	int ch;
+	if (loadmap() == true) {
+		drawmap();
+		drawUI();
+	}
+	
 
 	while (running) {   
 
@@ -104,6 +112,7 @@ void World::play() { //遊玩主程式
 		}
 
 		if (_kbhit()) {  // 如果有按鍵按下
+			int ch;
 			ch = _getch();  // 使用_getch()函數獲取按下的鍵值
 			switch (ch) {
 			case 'w' :
@@ -132,7 +141,7 @@ void World::play() { //遊玩主程式
 				break;
 			case 'r':
 				//std::cout << "向右" << std::endl;
-				restart();
+				restart(); // 嚴重bugggggggggg!!!!!!!!!當按太多次 r 過關後會卡頓
 
 				break;
 			case 27:  // 當按下ESC時循環，ESC鍵的鍵值是27
@@ -144,10 +153,11 @@ void World::play() { //遊玩主程式
 				break;
 			}
 
-			Tools::sleepMilsec(50);
+			Tools::sleepMilsec(50); //delay 防止案太快
 		}
 	}
-
+	stopBGM();	
+	//
 }
 
 
@@ -168,24 +178,23 @@ void World::end(){ // 最終過關
 		<< "|                                                                |" << endl
 		<< "|                                                                |" << endl
 		<< "|                          恭喜過關!!!!                          |" << endl
-		<< "|                     總花費步數 : "<< setw(5) <<stepsSum << " 步                      |" << endl
+		<< "|                     總花費步數 : " << setw(5) << stepsSum << " 步                      |" << endl
 		<< "|                                                                |" << endl
+		<< "|                            Made by                             |" << endl
 		<< "|                 資工一   411285052   曾柏碩                    |" << endl
 		<< "|                                                                |" << endl
 		<< "|                                                                |" << endl
-		<< "|                                                                |" << endl
-		<< " ================================================================ " << endl;
+		<< " ================================================================ " << endl <<endl;
 
 	Tools::SetColor(Col_RESET);
 }
-//恭喜過關!!!!
+
 
 void World::celebrate() {  //每關過關
-	string txt = "恭喜通過 第 " + to_string(level) + " 關";
+	string txt = "恭喜通過 第 " + to_string(level) + " 關!!!!";
 	showstate(txt , Col_yellow);
 	system("pause");
 }
-
 
 void World::restart(){  
 	
@@ -198,16 +207,19 @@ bool World::loadmap() {
 
 	string index;
 	index = to_string(level);
-
 	//index = "2";/////////////////////////////
 
 	string filename = "mission" + index + ".txt";
+	//filename = "w";
 
 	ifstream file(filename, ios::in);
 
 	if (!file) {
+		system("cls");
+		Tools::SetColor(Col_red);
 		cout << "Can't open the file : \"" + filename + "\"" << endl;
-
+		Tools::SetColor(Col_RESET);
+		running = false;
 		return false;
 	}
 	else {
@@ -265,7 +277,6 @@ void World::mapReset() {
 	charmap.clear();
 }
 
-
 void World::printOriginmap(){
 	for(int i = 0 ; i < row ; i++){
 		for(int j = 0 ; j < col ; j++){
@@ -288,7 +299,6 @@ void World::nextLevel() {
 		steps = 0;
 	}
 }
-
 
 void World::playerUp() {
 	int x = player.x(); // 獲取玩家的 x 座標
@@ -577,16 +587,14 @@ void World::drawUI() {
 	cout << " ======================================================= " << endl
 		<< "| 倉庫番                           行走步數: " << std::setw(5) << right << steps << " 步" << "   |" << endl
 		<< "|                                                       |" << endl
-		//<< "| 玩家 : 0 , 箱子 : 1 , 終點: 2 , 牆壁 : /              |" << endl
 		<< "| ";
 	Tools::SetColor(Col_blue); cout << "玩家 : 0"; Tools::SetColor(Col_RESET); cout << " , ";
 	Tools::SetColor(Col_shit); cout << "箱子 : 1"; Tools::SetColor(Col_RESET); cout << " , ";
 	Tools::SetColor(Col_red); cout << "終點 : 2"; Tools::SetColor(Col_RESET); cout << " , ";
 	Tools::SetColor(Col_gray); cout << "牆壁 : /"; Tools::SetColor(Col_RESET); cout << "             |" << endl;
 		//"| 玩家 : 0 , 箱子 : 1 , 終點: 2 , 牆壁 : /              |"
-
 	cout << "|                                                       |" << endl
-		<< "| R : 重新該關卡                                        |" << endl
+		<< "| R : 重新該關卡 , Esc : 離開遊戲                       |" << endl
 		<< "| W : 上 , S : 下 , A : 左 , D : 右                     |" << endl
 		<< " ======================================================= " << endl
 		;
@@ -604,7 +612,6 @@ void World::showstate(string state , Color color ) {
 	//goto 狀態位置 清空
 	Tools::gotoY(UI_state_Y);
 	cout << "                                                        ";
-
 
 	Tools::gotoY(UI_state_Y);
 	Tools::SetColor(color);
@@ -627,4 +634,15 @@ bool World::checkwin() {
 
 void World::createMap() {
 	//ofstream file();
+}
+
+void World::playBGM(const wstring& wfilename) {
+	PlaySound(wfilename.c_str(), NULL, SND_FILENAME | SND_ASYNC);
+}
+
+void World::stopBGM() {
+	PlaySound(NULL, NULL, 0);
+	if (soundThread.joinable()) {
+		soundThread.join();
+	}
 }

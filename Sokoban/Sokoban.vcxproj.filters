@@ -63,4 +63,20 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="mission1.txt">
+      <Filter>資源檔</Filter>
+    </Text>
+    <Text Include="mission2.txt">
+      <Filter>資源檔</Filter>
+    </Text>
+    <Text Include="mission3.txt">
+      <Filter>資源檔</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sokoban.wav">
+      <Filter>資源檔</Filter>
+    </Media>
+  </ItemGroup>
 </Project>

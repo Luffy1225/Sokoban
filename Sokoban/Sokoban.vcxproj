@@ -145,6 +145,14 @@
     <ClInclude Include="Tools.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="mission1.txt" />
+    <Text Include="mission2.txt" />
+    <Text Include="mission3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sokoban.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
