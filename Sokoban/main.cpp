@@ -1,15 +1,10 @@
-﻿#include <string>
-#include <iostream>
-#include "World.h"
-
-
+﻿#include "World.h"
 
 using namespace std;
 
 int main()
 {
 
-    
     World  Sokoban;
     Sokoban.start();
 
