@@ -74,3 +74,7 @@ void Tools::showCursor() {
     SetConsoleCursorInfo(consoleHandle, &info);
 }
 
+void Tools::clearX(int xpos) {
+    gotoX(xpos);
+
+}

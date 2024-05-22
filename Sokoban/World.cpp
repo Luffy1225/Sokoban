@@ -5,19 +5,29 @@
 #include <iostream>
 #include <iomanip>
 #include <conio.h>
+#include <fstream>
  
 #define LEVEL_AMOUNT 3
-
 
 using namespace std;
 
 World::World() {
 	level = 1; // start with level one
 	steps = 0; //步數
+	stepsSum = 0;
 
 	running = true;
 
 	col = 0, row = 0;
+
+	UI_main_X = 0;
+	UI_main_Y = 1;
+	UI_state_X = 0;
+	UI_state_Y = 8;
+	UI_map_X = 0;
+	UI_map_Y = 10;
+
+
 }
 
 
@@ -86,29 +96,30 @@ void World::play() { //遊玩主程式
 			case 'w' :
 				//std::cout << "向上"  << std::endl;
 				playerUp();
-				steps++;
 				update();
 
 				break;
 			case 'a' :
 				//std::cout << "向左" << std::endl;
 				playerLeft();
-				steps++;
 				update();
 
 				break;
 			case 's':
 				//std::cout << "向下" << std::endl;
 				playerDown();
-				steps++;
 				update();
 
 				break;
 			case 'd' :
 				//std::cout << "向右" << std::endl;
 				playerRight();
-				steps++;
 				update();
+
+				break;
+			case 'r':
+				//std::cout << "向右" << std::endl;
+				restart();
 
 				break;
 			case 27:  // 當按下ESC時循環，ESC鍵的鍵值是27
@@ -116,7 +127,7 @@ void World::play() { //遊玩主程式
 				break;
 			default:
 				string txt = "無效的鍵值：" + to_string(ch);
-				showstate(txt);
+				showstate(txt , Col_red);
 				break;
 			}
 
@@ -135,13 +146,14 @@ void World::end(){ // 最終過關
 
 void World::celebrate() {  //每關過關
 	string txt = "恭喜通過 第 " + to_string(level) + " 關";
-	showstate(txt);
+	showstate(txt , Col_yellow);
 	system("pause");
 }
 
 
 void World::restart(){  
-	level = 0;
+	
+	steps = 0;
 	play();
 }
 
@@ -196,7 +208,7 @@ bool World::loadmap() {
 				}
 				else {
 					map[i][j] = nullptr;
-					showstate("Null pointer");
+					showstate("Null pointer", Col_red);
 					// 對於其他情況的預設處理
 				}
 
@@ -205,10 +217,7 @@ bool World::loadmap() {
 		return true;
 
 	}
-}
-
-void World::moveBlockTo(int row, int col, Block) {
-
+	file.close();
 }
 
 void World::mapReset() {
@@ -239,6 +248,8 @@ void World::nextLevel() {
 	else
 	{
 		level++;
+		stepsSum += steps;
+		steps = 0;
 	}
 }
 
@@ -251,9 +262,12 @@ void World::playerUp() {
 
 	// 檢查玩家上方是否超出地圖邊界或是遇到障礙物
 	if (above < 0 || charmap[above][y] == Icon::obstacle) {
-		showstate("無法移動");
+		showstate("無法移動" , Col_red);
 		return; // 結束函式
 	}
+
+	steps++;
+
 
 	// 如果玩家上方是空地，可以移動玩家
 	if (charmap[above][y] == Icon::none) {
@@ -318,9 +332,12 @@ void World::playerDown() {
 
 	// 檢查玩家下方是否超出地圖邊界或是遇到障礙物
 	if (below >= charmap.size() || charmap[below][y] == Icon::obstacle) {
-		showstate("無法移動");
+		showstate("無法移動", Col_red);
 		return; // 結束函式
 	}
+
+	steps++;
+
 
 	// 如果玩家下方是空地，可以移動玩家
 	if (charmap[below][y] == Icon::none) {
@@ -384,10 +401,11 @@ void World::playerLeft() {
 
 	// 檢查玩家左方是否超出地圖邊界或是遇到障礙物
 	if (left < 0 || charmap[x][left] == Icon::obstacle) {
-		showstate("無法移動");
+		showstate("無法移動", Col_red);
 		return; // 結束函式
 	}
 
+	steps++;
 	// 如果玩家左方是空地，可以移動玩家
 	if (charmap[x][left] == Icon::none) {
 		// 交換玩家和空地的位置
@@ -446,9 +464,11 @@ void World::playerRight() {
 
 	// 檢查玩家右方是否超出地圖邊界或是遇到障礙物
 	if (right >= charmap[0].size() || charmap[x][right] == Icon::obstacle) {
-		showstate("無法移動");
+		showstate("無法移動", Col_red);
 		return; // 結束函式
 	}
+
+	steps++;
 
 	// 如果玩家右方是空地，可以移動玩家
 	if (charmap[x][right] == Icon::none) {
@@ -529,17 +549,24 @@ void World::drawUI() {
 
 void World::update() {
 	mainfresh();
-	showstate("");
+	showstate("                                                             ");
 	drawmap();
 
 }
 
-void World::showstate(string state) {
-	//goto 狀態位置
+void World::showstate(string state , Color color ) {
+	Tools::SetColor(color);
+
+
+	//goto 狀態位置 清空
+	Tools::gotoY(UI_state_Y);
+	cout << "                                                        ";
+
+
 	Tools::gotoY(UI_state_Y);
 	cout << "目前狀態: "  << state << endl;
+	Tools::SetColor(Col_RESET);
 }
-
 
 bool World::checkwin() {
 	for (int i = 0; i < row; i++) {
@@ -551,4 +578,9 @@ bool World::checkwin() {
 		}
 	}
 	return true;
+}
+
+
+void World::createMap() {
+	//ofstream file();
 }

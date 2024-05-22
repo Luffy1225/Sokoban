@@ -9,18 +9,6 @@
 // Color 參考
 //https://blog.wildsky.cc/posts/c-code-note/ 
 
-//enum Color {
-//	Col_darkblue = 1,
-//	Col_darkgreen = 2,
-//	Col_darkgreen = 3,
-//	Col_reset = 7,
-//	Col_blue = 9,
-//	Col_red = 12,
-//	Col_gold = 14,
-//	Col_white_black = 240,
-//
-//};
-
 enum Color {  // Col_字體顏色_背景顏色 //沒有背景顏色則為黑色
     Col_darkblue      = 1,
     Col_darkgreen     = 2,
@@ -288,6 +276,9 @@ public:
     static void  gotoXY(int xpos, int ypos);
     static void  gotoX(int xpos);
     static void  gotoY(int ypos);
+
+    static void  clearX(int xpos);
+
 	static COORD getpos();
 
 	// 顏色

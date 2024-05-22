@@ -5,6 +5,7 @@
 #include "Box.h"
 #include "Obstacle.h"
 #include "Target.h"
+#include "Tools.h"
 
 
 using namespace std;
@@ -12,9 +13,7 @@ using namespace std;
 class World
 {
 private:
-	//vector<vector<char> > map;
 	vector<vector<char> > charmap;
-	//vector<vector<Block> > map;
 	vector<vector<Block*> > map; // 要對 物件進行操作 不用指標會有 call by value 的問題
 	int row; 
 	int col;
@@ -24,26 +23,21 @@ private:
 	
 	int level;
 	int steps;
+	int stepsSum;
 
 #pragma region UIsetting
 
-	int UI_main_X = 0;
-	int UI_main_Y = 1;
-
-	int UI_state_X = 0;
-	int UI_state_Y = 8;
-
-	int UI_map_X = 0;
-	int UI_map_Y = 10;
+	int UI_main_X;
+	int UI_main_Y;
+	int UI_state_X;
+	int UI_state_Y;
+	int UI_map_X;
+	int UI_map_Y;
 
 
 #pragma endregion
 
-
-
-
-
-	bool running ;
+	bool running;
 
 	void mapReset();
 
@@ -54,7 +48,7 @@ public:
 
 	//顯示
 	void drawUI();
-	void showstate(string state);
+	void showstate(string state , Color color = Col_RESET);
 
 	void mainfresh();
 
@@ -65,8 +59,8 @@ public:
 
 	//遊戲機制
 	void start();
-	void play();
 	void intro();
+	void play();
 	void nextLevel();
 	void end();
 	void restart();
@@ -77,9 +71,6 @@ public:
 	bool loadmap();
 	void printOriginmap();
 	void printmap();
-	
-
-	void moveBlockTo(int row , int col, Block);
 
 	bool Diecheck();
 
@@ -87,6 +78,9 @@ public:
 	void playerDown();
 	void playerLeft();
 	void playerRight();
+
+	//地圖 
+	void createMap();
 
 
 };
