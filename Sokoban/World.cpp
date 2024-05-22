@@ -46,11 +46,23 @@ void World::drawmap() {
 }
 
 void World::intro(){ // 遊戲介紹
-	std::cout << "遊戲名稱：倉庫番\n\n"
-		<< "遊戲介紹：\n《倉庫番》是一款以推箱子為主題的益智遊戲。在遊戲中，玩家將扮演一名倉庫工人，需要將箱子推動到指定的位置，達到指定數量即可過關。然而，推箱子並不是一件容易的事情，玩家需要考慮每一步的移動，避免陷入困境。\n\n"
-		<< "遊戲規則：\n1. 玩家可以以「推」的方式移動箱子，向左、右、上、下四個方向移動。\n2. 玩家無法穿過牆壁，也無法將箱子拉動（只能推動箱子）。\n3. 箱子與玩家均無法穿過牆壁。\n4. 在測試關卡中，保證存在一條路徑可以將箱子推動到終點。\n5. 玩家可以任意移動，不一定要站在箱子旁邊。\n6. 即使箱子已經到達終點，仍可以被推動。\n7. 程式能夠自行判斷無解的情況，例如，箱子被推入死角無法再被推動，但死角並不是終點，則會告知玩家結束遊戲。\n\n"
-		<< "遊戲操作：\n玩家可以使用鍵盤或滑鼠進行操作，根據指示移動工人與箱子，推動箱子到指定位置即可通過關卡。\n\n"
-		<< "希望這份遊戲介紹與規則能幫助你更好地了解《倉庫番》的遊戲玩法！\n";
+	Tools::SetColor(Col_blue);
+	cout << " ================================================================ " << endl
+		<< "|     ____    ______   _  __  ______   _____     _     _   _     |" << endl
+		<< "|    / ___|  /  __  \\ | |/ / /  __  \\ |  _  )   / \\   | \\ | |    |" << endl
+		<< "|    \\____ \\ | |  | | | ' /  | |  | | | |_) |  / _ \\  |  \\| |    |" << endl
+		<< "|     ___) | | |__| | | . \\  | |__| | | |_) ) / ___ \\ | |\\  |    |" << endl
+		<< "|    |____/  \\______/ |_|\\_\\ \\______/ |____/ /_/   \\_\\|_| \\_|    |" << endl
+		<< "|                                                                |" << endl
+		<< " ================================================================ " << endl<<endl;
+	Tools::SetColor(Col_RESET);
+
+
+	std::cout << "遊戲名稱：倉庫番\n\n";
+	Tools::SetColor(Col_yellow); cout << "遊戲介紹："; Tools::SetColor(Col_RESET); cout << "\n《倉庫番》是一款以推箱子為主題的益智遊戲。在遊戲中，玩家將扮演一名倉庫工人，需要將箱子推動到指定的位置，達到指定數量即可過關。然而，推箱子並不是一件容易的事情，玩家需要考慮每一步的移動，避免陷入困境。\n\n";
+	Tools::SetColor(Col_yellow); cout << "遊戲規則："; Tools::SetColor(Col_RESET); cout << "\n1. 玩家可以以「推」的方式移動箱子，向左、右、上、下四個方向移動。\n2. 玩家無法穿過牆壁，也無法將箱子拉動（只能推動箱子）。\n3. 箱子與玩家均無法穿過牆壁。\n4. 在測試關卡中，保證存在一條路徑可以將箱子推動到終點。\n5. 玩家可以任意移動，不一定要站在箱子旁邊。\n6. 即使箱子已經到達終點，仍可以被推動。\n7. 程式能夠自行判斷無解的情況，例如，箱子被推入死角無法再被推動，但死角並不是終點，則會告知玩家結束遊戲。\n\n";
+	Tools::SetColor(Col_yellow); cout << "遊戲操作："; Tools::SetColor(Col_RESET); cout << "\n玩家可以使用「 W 」「 A 」「 S 」「 D 」操作，根據指示移動工人與箱子，推動箱子到指定位置即可通過關卡。\n\n";
+	cout << "希望這份遊戲介紹與規則能幫助你更好地了解《倉庫番》的遊戲玩法！\n";
 	system("pause");
 	system("cls");
 }
@@ -71,6 +83,7 @@ void World::play() { //遊玩主程式
 
 	loadmap();
 	drawmap();
+	drawUI();
 		
 	int ch;
 
@@ -139,10 +152,33 @@ void World::play() { //遊玩主程式
 
 
 void World::end(){ // 最終過關
-	for (int i = 0; i < 100; i++) {
-		cout << "恭喜完完全全破關!!!!!!!!!" << endl;
-	}
+	system("cls");
+	Tools::gotoX(0);
+
+	Tools::SetColor(Col_yellow);
+
+	cout << " ================================================================ " << endl
+		<< "|     ____    ______   _  __  ______   _____     _     _   _     |" << endl
+		<< "|    / ___|  /  __  \\ | |/ / /  __  \\ |  _  )   / \\   | \\ | |    |" << endl
+		<< "|    \\____ \\ | |  | | | ' /  | |  | | | |_) |  / _ \\  |  \\| |    |" << endl
+		<< "|     ___) | | |__| | | . \\  | |__| | | |_) ) / ___ \\ | |\\  |    |" << endl
+		<< "|    |____/  \\______/ |_|\\_\\ \\______/ |____/ /_/   \\_\\|_| \\_|    |" << endl
+		<< "|                                                                |" << endl
+		<< "|                                                                |" << endl
+		<< "|                                                                |" << endl
+		<< "|                                                                |" << endl
+		<< "|                          恭喜過關!!!!                          |" << endl
+		<< "|                     總花費步數 : "<< setw(5) <<stepsSum << " 步                      |" << endl
+		<< "|                                                                |" << endl
+		<< "|                 資工一   411285052   曾柏碩                    |" << endl
+		<< "|                                                                |" << endl
+		<< "|                                                                |" << endl
+		<< "|                                                                |" << endl
+		<< " ================================================================ " << endl;
+
+	Tools::SetColor(Col_RESET);
 }
+//恭喜過關!!!!
 
 void World::celebrate() {  //每關過關
 	string txt = "恭喜通過 第 " + to_string(level) + " 關";
@@ -536,16 +572,25 @@ void World::mainfresh() {
 
 void World::drawUI() {
 	// gotoxy ui列
+	Tools::gotoX(0);
+
 	cout << " ======================================================= " << endl
 		<< "| 倉庫番                           行走步數: " << std::setw(5) << right << steps << " 步" << "   |" << endl
 		<< "|                                                       |" << endl
-		<< "| 玩家 : 0 , 箱子 : 1 , 終點: 2 , 牆壁 : /              |" << endl
-		<< "|                                                       |" << endl
-		<< "|                                                       |" << endl
+		//<< "| 玩家 : 0 , 箱子 : 1 , 終點: 2 , 牆壁 : /              |" << endl
+		<< "| ";
+	Tools::SetColor(Col_blue); cout << "玩家 : 0"; Tools::SetColor(Col_RESET); cout << " , ";
+	Tools::SetColor(Col_shit); cout << "箱子 : 1"; Tools::SetColor(Col_RESET); cout << " , ";
+	Tools::SetColor(Col_red); cout << "終點 : 2"; Tools::SetColor(Col_RESET); cout << " , ";
+	Tools::SetColor(Col_gray); cout << "牆壁 : /"; Tools::SetColor(Col_RESET); cout << "             |" << endl;
+		//"| 玩家 : 0 , 箱子 : 1 , 終點: 2 , 牆壁 : /              |"
+
+	cout << "|                                                       |" << endl
+		<< "| R : 重新該關卡                                        |" << endl
 		<< "| W : 上 , S : 下 , A : 左 , D : 右                     |" << endl
 		<< " ======================================================= " << endl
 		;
-}//const char Icon::player = '0';
+}
 
 void World::update() {
 	mainfresh();
@@ -555,8 +600,6 @@ void World::update() {
 }
 
 void World::showstate(string state , Color color ) {
-	Tools::SetColor(color);
-
 
 	//goto 狀態位置 清空
 	Tools::gotoY(UI_state_Y);
@@ -564,6 +607,7 @@ void World::showstate(string state , Color color ) {
 
 
 	Tools::gotoY(UI_state_Y);
+	Tools::SetColor(color);
 	cout << "目前狀態: "  << state << endl;
 	Tools::SetColor(Col_RESET);
 }
