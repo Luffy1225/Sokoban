@@ -8,8 +8,6 @@ using namespace std;
 
 int main()
 {
-
-    
     World  Sokoban;
     Sokoban.start();
 

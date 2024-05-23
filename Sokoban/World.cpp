@@ -27,9 +27,9 @@ World::World() {
 	UI_main_X = 0;
 	UI_main_Y = 1;
 	UI_state_X = 0;
-	UI_state_Y = 8;
+	UI_state_Y = 10;
 	UI_map_X = 0;
-	UI_map_Y = 10;
+	UI_map_Y = 12;
 
 
 }
@@ -62,11 +62,14 @@ void World::intro(){ // 遊戲介紹
 	Tools::SetColor(Col_RESET);
 
 
-	std::cout << "遊戲名稱：倉庫番\n\n";
+	std::cout << "遊戲名稱：倉庫番\n";
 	Tools::SetColor(Col_yellow); cout << "遊戲介紹："; Tools::SetColor(Col_RESET); cout << "\n《倉庫番》是一款以推箱子為主題的益智遊戲。在遊戲中，玩家將扮演一名倉庫工人，需要將箱子推動到指定的位置，達到指定數量即可過關。然而，推箱子並不是一件容易的事情，玩家需要考慮每一步的移動，避免陷入困境。\n\n";
 	Tools::SetColor(Col_yellow); cout << "遊戲規則："; Tools::SetColor(Col_RESET); cout << "\n1. 玩家可以以「推」的方式移動箱子，向左、右、上、下四個方向移動。\n2. 玩家無法穿過牆壁，也無法將箱子拉動（只能推動箱子）。\n3. 箱子與玩家均無法穿過牆壁。\n4. 在測試關卡中，保證存在一條路徑可以將箱子推動到終點。\n5. 玩家可以任意移動，不一定要站在箱子旁邊。\n6. 即使箱子已經到達終點，仍可以被推動。\n7. 程式能夠自行判斷無解的情況，例如，箱子被推入死角無法再被推動，但死角並不是終點，則會告知玩家結束遊戲。\n\n";
 	Tools::SetColor(Col_yellow); cout << "遊戲操作："; Tools::SetColor(Col_RESET); cout << "\n玩家可以使用「 W 」「 A 」「 S 」「 D 」操作，根據指示移動工人與箱子，推動箱子到指定位置即可通過關卡。\n\n";
-	cout << "希望這份遊戲介紹與規則能幫助你更好地了解《倉庫番》的遊戲玩法！\n";
+	cout << "希望這份遊戲介紹與規則能幫助你更好地了解《倉庫番》的遊戲玩法！\n\n";
+
+	Tools::SetColor(Col_red); cout << "!!!!按下 Alt + Enter 進入全螢幕 以免出現錯誤!!!!\n"; Tools::SetColor(Col_RESET);
+
 	system("pause");
 	system("cls");
 }
@@ -118,25 +121,21 @@ void World::play() { //遊玩主程式
 			case 'w' :
 				//std::cout << "向上"  << std::endl;
 				playerUp();
-				update();
 
 				break;
 			case 'a' :
 				//std::cout << "向左" << std::endl;
 				playerLeft();
-				update();
 
 				break;
 			case 's':
 				//std::cout << "向下" << std::endl;
 				playerDown();
-				update();
 
 				break;
 			case 'd' :
 				//std::cout << "向右" << std::endl;
 				playerRight();
-				update();
 
 				break;
 			case 'r':
@@ -153,6 +152,7 @@ void World::play() { //遊玩主程式
 				break;
 			}
 
+			update();
 			Tools::sleepMilsec(50); //delay 防止案太快
 		}
 	}
@@ -199,7 +199,8 @@ void World::celebrate() {  //每關過關
 void World::restart(){  
 	
 	steps = 0;
-	play();
+	//play();
+	loadmap();
 }
 
 bool World::loadmap() {
@@ -587,14 +588,17 @@ void World::drawUI() {
 	cout << " ======================================================= " << endl
 		<< "| 倉庫番                           行走步數: " << std::setw(5) << right << steps << " 步" << "   |" << endl
 		<< "|                                                       |" << endl
+		<< "|-------------------------------------------------------| " << endl
 		<< "| ";
 	Tools::SetColor(Col_blue); cout << "玩家 : 0"; Tools::SetColor(Col_RESET); cout << " , ";
 	Tools::SetColor(Col_shit); cout << "箱子 : 1"; Tools::SetColor(Col_RESET); cout << " , ";
 	Tools::SetColor(Col_red); cout << "終點 : 2"; Tools::SetColor(Col_RESET); cout << " , ";
 	Tools::SetColor(Col_gray); cout << "牆壁 : /"; Tools::SetColor(Col_RESET); cout << "             |" << endl;
 		//"| 玩家 : 0 , 箱子 : 1 , 終點: 2 , 牆壁 : /              |"
-	cout << "|                                                       |" << endl
-		<< "| R : 重新該關卡 , Esc : 離開遊戲                       |" << endl
+	cout << "|                                                       |" << endl;
+	//Tools::SetColor(Col_red); cout << "!!!!按下 Alt + Enter 進入全螢幕 以免出現錯誤!!!!\n"; Tools::SetColor(Col_RESET);
+
+	cout<< "| R : 重新該關卡 , Esc : 離開遊戲                       |" << endl
 		<< "| W : 上 , S : 下 , A : 左 , D : 右                     |" << endl
 		<< " ======================================================= " << endl
 		;
