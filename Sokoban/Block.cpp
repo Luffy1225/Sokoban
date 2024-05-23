@@ -22,3 +22,31 @@ Block::Block(int x , int y) {
 void Block::print() {
 	cout << Icon::none;
 }
+
+int Block::x() {
+	return pos_x;
+}
+int Block::y() {
+	return pos_y;
+}
+
+
+void Block::SetXYPos(int x, int y) {
+	pos_x = x;
+	pos_y = y;
+}
+void Block::Set_Xpos(int x) {
+	pos_x = x;
+
+}
+void Block::Set_Ypos(int y) {
+	pos_y = y;
+
+}
+
+void Block::AddX(int Xvalue) {
+	pos_x += Xvalue;
+}
+void Block::AddY(int Yvalue) {
+	pos_y += Yvalue;
+}

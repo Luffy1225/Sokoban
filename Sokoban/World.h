@@ -15,13 +15,18 @@ class World
 private:
 	vector<vector<char> > charmap;
 	vector<vector<Block*> > map; // 要對 物件進行操作 不用指標會有 call by value 的問題
+	vector<Target*> targetVector;
+	vector<Box*> BoxVector;
+
+
 	int row; 
 	int col;
 
 	Player player;
 	
+	int MODE; // 讀檔 模式 1. 正常模式 2. 助教模式
 	
-	int level;
+	int level; 
 	int steps;
 	int stepsSum;
 
@@ -49,6 +54,7 @@ public:
 
 
 	//顯示
+	void drawLOGO(Color color = Col_RESET);
 	void drawUI();
 	void showstate(string state , Color color = Col_RESET);
 
@@ -60,11 +66,14 @@ public:
 	//遊戲機制
 	void start();
 	void intro();
+	void modeSelect();
 	void play();
 	void nextLevel();
 	void end();
 	void restart();
 	bool checkwin();
+	bool checklose();
+	bool checkstate();
 	void celebrate();
 
 

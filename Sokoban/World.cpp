@@ -46,11 +46,10 @@ void World::drawmap() {
 		cout << endl;
 	}
 
-	//printOriginmap();
 }
 
-void World::intro(){ // 遊戲介紹
-	Tools::SetColor(Col_blue);
+void World::drawLOGO(Color color) {
+	Tools::SetColor(color);
 	cout << " ================================================================ " << endl
 		<< "|     ____    ______   _  __  ______   _____     _     _   _     |" << endl
 		<< "|    / ___|  /  __  \\ | |/ / /  __  \\ |  _  )   / \\   | \\ | |    |" << endl
@@ -58,11 +57,18 @@ void World::intro(){ // 遊戲介紹
 		<< "|     ___) | | |__| | | . \\  | |__| | | |_) ) / ___ \\ | |\\  |    |" << endl
 		<< "|    |____/  \\______/ |_|\\_\\ \\______/ |____/ /_/   \\_\\|_| \\_|    |" << endl
 		<< "|                                                                |" << endl
-		<< " ================================================================ " << endl<<endl;
+	    << " ================================================================ " << endl;
+
 	Tools::SetColor(Col_RESET);
+}
 
 
-	std::cout << "遊戲名稱：倉庫番\n";
+
+void World::intro(){ // 遊戲介紹
+
+	drawLOGO(Col_blue);
+
+	std::cout << "\n遊戲名稱：倉庫番\n";
 	Tools::SetColor(Col_yellow); cout << "遊戲介紹："; Tools::SetColor(Col_RESET); cout << "\n《倉庫番》是一款以推箱子為主題的益智遊戲。在遊戲中，玩家將扮演一名倉庫工人，需要將箱子推動到指定的位置，達到指定數量即可過關。然而，推箱子並不是一件容易的事情，玩家需要考慮每一步的移動，避免陷入困境。\n\n";
 	Tools::SetColor(Col_yellow); cout << "遊戲規則："; Tools::SetColor(Col_RESET); cout << "\n1. 玩家可以以「推」的方式移動箱子，向左、右、上、下四個方向移動。\n2. 玩家無法穿過牆壁，也無法將箱子拉動（只能推動箱子）。\n3. 箱子與玩家均無法穿過牆壁。\n4. 在測試關卡中，保證存在一條路徑可以將箱子推動到終點。\n5. 玩家可以任意移動，不一定要站在箱子旁邊。\n6. 即使箱子已經到達終點，仍可以被推動。\n7. 程式能夠自行判斷無解的情況，例如，箱子被推入死角無法再被推動，但死角並不是終點，則會告知玩家結束遊戲。\n\n";
 	Tools::SetColor(Col_yellow); cout << "遊戲操作："; Tools::SetColor(Col_RESET); cout << "\n玩家可以使用「 W 」「 A 」「 S 」「 D 」操作，根據指示移動工人與箱子，推動箱子到指定位置即可通過關卡。\n\n";
@@ -83,64 +89,82 @@ void World::start() { // 遊戲開始位置
 	// 確保音樂已經開始播放
 	Sleep(100);
 	intro();
-	drawUI();
-	showstate("遊戲開始");
-
+	modeSelect();
+	system("cls");
 	play();
 
 }
 
+void World::modeSelect() {
+
+	bool selected = false;
+	do {
+		Tools::gotoY(1);
+		drawLOGO();
+
+		int choice;
+		cout << "請輸入地圖模式 :" << endl;
+		cout << "1. 正常模式 mission 1 ~ 3 " << endl;
+		cout << "2. 助教模式 測資地圖" << endl;
+		cin >> choice;
+
+		switch (choice)
+		{
+
+		case 1:
+			MODE = 1;
+			selected = true;
+			break;
+
+		case 2:
+			MODE = 2;
+			selected = true;
+			break;
+
+		default:
+			system("cls");
+			std::cout << "無效的選擇，請輸入 1 或 2。\n"; break;
+		}
+
+
+	} while (selected != true);
+
+}
+
+
+
 void World::play() { //遊玩主程式
 
 	if (loadmap() == true) {
-		drawmap();
 		drawUI();
+		drawmap();
 	}
-	
 
-	while (running) {   
+	while (running) {
 
-		if (checkwin() == true) {
-			
-			nextLevel();
-
-			if (running) {
-				celebrate();
-				system("cls");
-				loadmap();
-				drawUI();
-				drawmap();
-			}
-
-		}
-
+		//檢查是否按下重新開始按鈕（這裡假設按下 'R' 鍵來重新開始）
 		if (_kbhit()) {  // 如果有按鍵按下
 			int ch;
 			ch = _getch();  // 使用_getch()函數獲取按下的鍵值
 			switch (ch) {
-			case 'w' :
-				//std::cout << "向上"  << std::endl;
+			case 'w':
 				playerUp();
 
 				break;
-			case 'a' :
-				//std::cout << "向左" << std::endl;
+			case 'a':
 				playerLeft();
 
 				break;
 			case 's':
-				//std::cout << "向下" << std::endl;
 				playerDown();
 
 				break;
-			case 'd' :
-				//std::cout << "向右" << std::endl;
+			case 'd':
 				playerRight();
 
 				break;
 			case 'r':
-				//std::cout << "向右" << std::endl;
-				restart(); // 嚴重bugggggggggg!!!!!!!!!當按太多次 r 過關後會卡頓
+				restart();
 
 				break;
 			case 27:  // 當按下ESC時循環，ESC鍵的鍵值是27
@@ -148,18 +172,53 @@ void World::play() { //遊玩主程式
 				break;
 			default:
 				string txt = "無效的鍵值：" + to_string(ch);
-				showstate(txt , Col_red);
+				showstate(txt, Col_red);
 				break;
 			}
 
+			// 渲染遊戲畫面
+			// 例如繪製角色、地圖等
+
 			update();
 			Tools::sleepMilsec(50); //delay 防止案太快
+
+			if (checkwin() == true) {
+				stepsSum += steps;
+				nextLevel();
+
+				/*if (running) {
+					celebrate();
+					system("cls");
+					loadmap();
+					drawUI();
+					drawmap();
+				}*/
+
+			}
+			else if (checklose() == true) {
+				showstate("已死局！按 'R' 鍵重新開始，或按 ESC 離開遊戲。", Col_red);
+
+				while (true) {
+					if (_kbhit()) {  // 如果有按鍵按下
+						int ch = _getch();  // 使用_getch()函數獲取按下的鍵值
+						if (ch == 'r') {
+							restart();
+							break;
+						}
+						else if (ch == 27) {  // 當按下ESC時
+							running = false;
+							break;
+						}
+					}
+				}
+			}
+
 		}
 	}
-	stopBGM();	
-	//
-}
 
+	stopBGM();	
+
+}
 
 void World::end(){ // 最終過關
 	system("cls");
@@ -187,8 +246,9 @@ void World::end(){ // 最終過關
 		<< " ================================================================ " << endl <<endl;
 
 	Tools::SetColor(Col_RESET);
+	system("pause");
+	system("cls");
 }
-
 
 void World::celebrate() {  //每關過關
 	string txt = "恭喜通過 第 " + to_string(level) + " 關!!!!";
@@ -199,21 +259,36 @@ void World::celebrate() {  //每關過關
 void World::restart(){  
 	
 	steps = 0;
-	//play();
 	loadmap();
+	showstate("遊戲重新開始",Col_red);
 }
 
 bool World::loadmap() {
 	mapReset();
 
-	string index;
-	index = to_string(level);
-	//index = "2";/////////////////////////////
+	ifstream file;
+	string filename;
 
-	string filename = "mission" + index + ".txt";
-	//filename = "w";
+	if (MODE == 1) {  //正常模式
 
-	ifstream file(filename, ios::in);
+		string index;
+		index = to_string(level);
+		//index = "2";/////////////////////////////
+
+		filename = "mission" + index + ".txt";
+		//filename = "w";
+
+		file = ifstream(filename, ios::in);
+	}
+	else {  //助教模式
+		drawLOGO();
+
+		cout << "請輸入 地圖檔案名稱: ";
+		cin >> filename;
+		file = ifstream(filename, ios::in);
+
+		system("cls");
+	}
 
 	if (!file) {
 		system("cls");
@@ -221,6 +296,7 @@ bool World::loadmap() {
 		cout << "Can't open the file : \"" + filename + "\"" << endl;
 		Tools::SetColor(Col_RESET);
 		running = false;
+		system("pause");
 		return false;
 	}
 	else {
@@ -236,15 +312,20 @@ bool World::loadmap() {
 				charmap[i][j] = ch;
 				
 				if (ch == Icon::player) {
-					player.playerSetXYPos(i, j);
+					
+					player.SetXYPos(i, j);
 					map[i][j] = new Player(i, j);
 				}
 				else if (ch == Icon::box) {
-					map[i][j] = new Box(i, j);
+					Box* temp = new Box(i, j); // 使用 new 動態分配 Box 物件
+					map[i][j] = temp; // 將指標存儲到 map 中
+					BoxVector.push_back(temp); // 將指標存儲到 BoxVector 中
 					// 做一些處理箱子的操作
 				}
 				else if (ch == Icon::target) {
-					map[i][j] = new Target(i, j);
+					Target* temp = new Target(i,j);
+					map[i][j] = temp;
+					targetVector.push_back(temp);
 					// 做一些處理目標的操作
 				}
 				else if (ch == Icon::obstacle) {
@@ -263,6 +344,8 @@ bool World::loadmap() {
 
 			}
 		}
+
+		showstate("遊戲開始");
 		return true;
 
 	}
@@ -276,6 +359,9 @@ void World::mapReset() {
     }
     map.clear();
 	charmap.clear();
+
+	BoxVector.clear();
+	targetVector.clear();
 }
 
 void World::printOriginmap(){
@@ -289,15 +375,23 @@ void World::printOriginmap(){
 
 void World::nextLevel() {
 
-	if (level == LEVEL_AMOUNT) {
+	if (level == LEVEL_AMOUNT || MODE == 2) {
 		end();
 		running = false;
 	}
 	else
 	{
+		celebrate();
+		system("cls");
+
 		level++;
-		stepsSum += steps;
 		steps = 0;
+
+		loadmap();
+		drawUI();
+		drawmap();
+
+
 	}
 }
 
@@ -324,14 +418,16 @@ void World::playerUp() {
 		charmap[above][y] = temp;
 
 		// 更新地圖上玩家的位置
-		player.playerAddX(-1);
+		player.AddX(-1);
 
 		// 交換地圖上的Block指標
 		Block* tempBlock = map[x][y];
 		map[x][y] = map[above][y];
 		map[above][y] = tempBlock;
 
-
+		// 更新Block位置
+		map[x][y]->SetXYPos(x, y);
+		map[above][y]->SetXYPos(above,y);
 	}
 	// 如果玩家上方是箱子，檢查是否有足夠的空間移動箱子
 	else if (charmap[above][y] == Icon::box) {
@@ -341,13 +437,17 @@ void World::playerUp() {
 			charmap[x - 2][y] = charmap[above][y];
 			charmap[above][y] = temp;
 
-			player.playerAddX(-1);
+			player.AddX(-1);
 
 			// 交換地圖上的Block指標
 			Block* tempBlock = map[x][y];
 			map[x][y] = map[x - 2][y];
 			map[x - 2][y] = map[above][y];
 			map[above][y] = tempBlock;
+
+			map[x][y]->SetXYPos(x,y);
+			map[above][y]->SetXYPos(above,y);
+			map[x - 2][y]->SetXYPos(x-2,y);
 		}
 		else if (charmap[x - 2][y] == Icon::target) { // 碰到終點特例
 			char temp = charmap[x][y];
@@ -356,13 +456,19 @@ void World::playerUp() {
 			charmap[above][y] = temp;
 			charmap[x][y] = '-';
 
-			player.playerAddX(-1);
+			player.AddX(-1);
 
 			// 交換地圖上的Block指標
 			Block* tempBlock = map[x][y];
 			map[x - 2][y] = map[above][y];
 			map[above][y] = map[x][y];
 			map[x][y] = new Block(x, y);
+
+			map[x][y]->SetXYPos(x, y);
+			map[above][y]->SetXYPos(above, y);
+			map[x - 2][y]->SetXYPos(x - 2, y);
+
+
 		}
 	}
 	else {
@@ -371,6 +477,7 @@ void World::playerUp() {
 
 
 }
+
 void World::playerDown() {
 	int x = player.x(); // 獲取玩家的 x 座標
 	int y = player.y(); // 獲取玩家的 y 座標
@@ -385,7 +492,6 @@ void World::playerDown() {
 
 	steps++;
 
-
 	// 如果玩家下方是空地，可以移動玩家
 	if (charmap[below][y] == Icon::none) {
 		// 交換玩家和空地的位置
@@ -394,14 +500,16 @@ void World::playerDown() {
 		charmap[below][y] = temp;
 
 		// 更新地圖上玩家的位置
-		player.playerAddX(1);
+		player.AddX(1);
 
 		// 交換地圖上的Block指標
 		Block* tempBlock = map[x][y];
 		map[x][y] = map[below][y];
 		map[below][y] = tempBlock;
 
-
+		// 更新Block位置
+		map[x][y]->SetXYPos(x, y);
+		map[below][y]->SetXYPos(below, y);
 	}
 	// 如果玩家下方是箱子，檢查是否有足夠的空間移動箱子
 	else if (charmap[below][y] == Icon::box) {
@@ -411,13 +519,17 @@ void World::playerDown() {
 			charmap[x + 2][y] = charmap[below][y];
 			charmap[below][y] = temp;
 
-			player.playerAddX(1);
+			player.AddX(1);
 
 			// 交換地圖上的Block指標
 			Block* tempBlock = map[x][y];
 			map[x][y] = map[x + 2][y];
 			map[x + 2][y] = map[below][y];
 			map[below][y] = tempBlock;
+
+			map[x][y]->SetXYPos(x, y);
+			map[below][y]->SetXYPos(below, y);
+			map[x + 2][y]->SetXYPos(x + 2, y);
 		}
 		else if (charmap[x + 2][y] == Icon::target) { // 碰到終點特例
 			char temp = charmap[x][y];
@@ -426,20 +538,24 @@ void World::playerDown() {
 			charmap[below][y] = temp;
 			charmap[x][y] = '-';
 
-			player.playerAddX(1);
+			player.AddX(1);
 
 			// 交換地圖上的Block指標
 			Block* tempBlock = map[x][y];
 			map[x + 2][y] = map[below][y];
 			map[below][y] = map[x][y];
 			map[x][y] = new Block(x, y);
+
+			map[x][y]->SetXYPos(x, y);
+			map[below][y]->SetXYPos(below, y);
+			map[x + 2][y]->SetXYPos(x + 2, y);
 		}
 	}
 	else {
 		cout << "未知情況" << endl; // 輸出未知情況的訊息
 	}
-
 }
+
 void World::playerLeft() {
 	int x = player.x(); // 獲取玩家的 x 座標
 	int y = player.y(); // 獲取玩家的 y 座標
@@ -453,6 +569,7 @@ void World::playerLeft() {
 	}
 
 	steps++;
+
 	// 如果玩家左方是空地，可以移動玩家
 	if (charmap[x][left] == Icon::none) {
 		// 交換玩家和空地的位置
@@ -461,14 +578,16 @@ void World::playerLeft() {
 		charmap[x][left] = temp;
 
 		// 更新地圖上玩家的位置
-		player.playerAddY(-1);
+		player.AddY(-1);
 
 		// 交換地圖上的Block指標
 		Block* tempBlock = map[x][y];
 		map[x][y] = map[x][left];
 		map[x][left] = tempBlock;
 
-
+		// 更新Block位置
+		map[x][y]->SetXYPos(x, y);
+		map[x][left]->SetXYPos(x, left);
 	}
 	// 如果玩家左方是箱子，檢查是否有足夠的空間移動箱子
 	else if (charmap[x][left] == Icon::box) {
@@ -478,13 +597,17 @@ void World::playerLeft() {
 			charmap[x][y - 2] = charmap[x][left];
 			charmap[x][left] = temp;
 
-			player.playerAddY(-1);
+			player.AddY(-1);
 
 			// 交換地圖上的Block指標
 			Block* tempBlock = map[x][y];
 			map[x][y] = map[x][y - 2];
 			map[x][y - 2] = map[x][left];
 			map[x][left] = tempBlock;
+
+			map[x][y]->SetXYPos(x, y);
+			map[x][left]->SetXYPos(x, left);
+			map[x][y - 2]->SetXYPos(x, y - 2);
 		}
 		else if (charmap[x][y - 2] == Icon::target) { // 碰到終點特例
 			char temp = charmap[x][y];
@@ -493,16 +616,24 @@ void World::playerLeft() {
 			charmap[x][left] = temp;
 			charmap[x][y] = '-';
 
-			player.playerAddY(-1);
+			player.AddY(-1);
 
 			// 交換地圖上的Block指標
 			Block* tempBlock = map[x][y];
 			map[x][y - 2] = map[x][left];
 			map[x][left] = map[x][y];
 			map[x][y] = new Block(x, y);
+
+			map[x][y]->SetXYPos(x, y);
+			map[x][left]->SetXYPos(x, left);
+			map[x][y - 2]->SetXYPos(x, y - 2);
 		}
 	}
+	else {
+		cout << "未知情況" << endl; // 輸出未知情況的訊息
+	}
 }
+
 void World::playerRight() {
 	int x = player.x(); // 獲取玩家的 x 座標
 	int y = player.y(); // 獲取玩家的 y 座標
@@ -525,13 +656,16 @@ void World::playerRight() {
 		charmap[x][right] = temp;
 
 		// 更新地圖上玩家的位置
-		player.playerAddY(1);
+		player.AddY(1);
 
 		// 交換地圖上的Block指標
 		Block* tempBlock = map[x][y];
 		map[x][y] = map[x][right];
 		map[x][right] = tempBlock;
 
+		// 更新Block位置
+		map[x][y]->SetXYPos(x, y);
+		map[x][right]->SetXYPos(x, right);
 	}
 	// 如果玩家右方是箱子，檢查是否有足夠的空間移動箱子
 	else if (charmap[x][right] == Icon::box) {
@@ -541,13 +675,17 @@ void World::playerRight() {
 			charmap[x][y + 2] = charmap[x][right];
 			charmap[x][right] = temp;
 
-			player.playerAddY(1);
+			player.AddY(1);
 
 			// 交換地圖上的Block指標
 			Block* tempBlock = map[x][y];
 			map[x][y] = map[x][y + 2];
 			map[x][y + 2] = map[x][right];
 			map[x][right] = tempBlock;
+
+			map[x][y]->SetXYPos(x, y);
+			map[x][right]->SetXYPos(x, right);
+			map[x][y + 2]->SetXYPos(x, y + 2);
 		}
 		else if (charmap[x][y + 2] == Icon::target) { // 碰到終點特例
 			char temp = charmap[x][y];
@@ -556,21 +694,22 @@ void World::playerRight() {
 			charmap[x][right] = temp;
 			charmap[x][y] = '-';
 
-			player.playerAddY(1);
+			player.AddY(1);
 
 			// 交換地圖上的Block指標
 			Block* tempBlock = map[x][y];
 			map[x][y + 2] = map[x][right];
 			map[x][right] = map[x][y];
 			map[x][y] = new Block(x, y);
+
+			map[x][y]->SetXYPos(x, y);
+			map[x][right]->SetXYPos(x, right);
+			map[x][y + 2]->SetXYPos(x, y + 2);
 		}
 	}
 	else {
 		cout << "未知情況" << endl; // 輸出未知情況的訊息
 	}
-
-
-
 }
 
  
@@ -579,6 +718,7 @@ void World::mainfresh() {
 	cout << "| 倉庫番                           行走步數: " << std::setw(5) << right << steps << " 步" << "   |" << endl;
 
 }
+
 
 
 void World::drawUI() {
@@ -628,13 +768,43 @@ bool World::checkwin() {
 		for (int j = 0; j < col; j++) {
 			if (charmap[i][j] == '2') {
 				return false;
-				break;
+				
 			}
 		}
 	}
 	return true;
 }
 
+bool World::checklose() {
+	for (int i = 0; i < BoxVector.size(); i++) {
+		int box_x = BoxVector[i]->x();
+		int box_y = BoxVector[i]->y();
+
+		if (charmap[box_x - 1][box_y] == '/' && charmap[box_x][box_y - 1] == '/') {
+			return true;
+		}
+		else if (charmap[box_x - 1][box_y] == '/' && charmap[box_x][box_y + 1] == '/') {
+			return true;
+		}
+		else if (charmap[box_x + 1][box_y] == '/' && charmap[box_x][box_y - 1] == '/') {
+			return true;
+		}
+		else if (charmap[box_x + 1][box_y] == '/' && charmap[box_x][box_y + 1] == '/') {
+			return true;
+		}
+		else
+			return false;
+	}
+}
+
+bool World::checkstate() {
+	if (checklose() == true || checkwin() == true) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
 void World::createMap() {
 	//ofstream file();

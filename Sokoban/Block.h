@@ -42,6 +42,16 @@ public:
 	Block(int x, int y);
 	Block();
 
+	int x();
+	int y();
+
+	void SetXYPos(int, int);
+	void Set_Xpos(int);
+	void Set_Ypos(int);
+
+	void AddX(int Xvalue);
+	void AddY(int Yvalue);
+
 };
 
 #endif // ICON_H

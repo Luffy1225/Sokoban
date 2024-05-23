@@ -4,10 +4,8 @@ using namespace std;
 
 int main()
 {
-    World  Sokoban;
-    Sokoban.start();
-
-    system("pause");
+    World Sokoban;
+    Sokoban.start(); 
 
     return 0;
 }

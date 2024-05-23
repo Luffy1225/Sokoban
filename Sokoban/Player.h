@@ -13,15 +13,15 @@ public:
 
 	void print() override;
 
-	int x();
-	int y();
+	/*int x();
+	int y();*/
 	
-	void playerSetXYPos(int , int );
+	/*void playerSetXYPos(int , int );
 	void playerSet_Xpos(int );
 	void playerSet_Ypos(int );
 
 	void playerAddX(int Xvalue);
-	void playerAddY(int Yvalue);
+	void playerAddY(int Yvalue);*/
 
 
 };
