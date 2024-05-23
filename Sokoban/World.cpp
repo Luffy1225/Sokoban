@@ -20,7 +20,9 @@ World::World() {
 	steps = 0; //步數
 	stepsSum = 0;
 
+	MODE = -1;
 	running = true;
+	restartRequest = false;
 
 	col = 0, row = 0;
 
@@ -30,6 +32,8 @@ World::World() {
 	UI_state_Y = 10;
 	UI_map_X = 0;
 	UI_map_Y = 12;
+
+	
 
 
 }
@@ -164,7 +168,9 @@ void World::play() { //遊玩主程式
 
 				break;
 			case 'r':
+				restartRequest = true;
 				restart();
+				restartRequest = false;
 
 				break;
 			case 27:  // 當按下ESC時循環，ESC鍵的鍵值是27
@@ -202,7 +208,9 @@ void World::play() { //遊玩主程式
 					if (_kbhit()) {  // 如果有按鍵按下
 						int ch = _getch();  // 使用_getch()函數獲取按下的鍵值
 						if (ch == 'r') {
+							restartRequest = true;
 							restart();
+							restartRequest = false;
 							break;
 						}
 						else if (ch == 27) {  // 當按下ESC時
@@ -277,23 +285,27 @@ bool World::loadmap() {
 
 		filename = "mission" + index + ".txt";
 		//filename = "w";
+		Filename = filename;
 
-		file = ifstream(filename, ios::in);
 	}
 	else {  //助教模式
-		drawLOGO();
+		if (restartRequest != true) {
+			drawLOGO();
 
-		cout << "請輸入 地圖檔案名稱: ";
-		cin >> filename;
-		file = ifstream(filename, ios::in);
+			cout << "請輸入 地圖檔案名稱: ";
+			cin >> filename;
+			Filename = filename;
+			system("cls");
 
-		system("cls");
+		}
+
 	}
+	file = ifstream(Filename, ios::in);
 
 	if (!file) {
 		system("cls");
 		Tools::SetColor(Col_red);
-		cout << "Can't open the file : \"" + filename + "\"" << endl;
+		cout << "Can't open the file : \"" + Filename + "\"" << endl;
 		Tools::SetColor(Col_RESET);
 		running = false;
 		system("pause");

@@ -29,6 +29,7 @@ private:
 	int level; 
 	int steps;
 	int stepsSum;
+	string Filename;
 
 
 	thread soundThread;
@@ -45,6 +46,7 @@ private:
 #pragma endregion
 
 	bool running;
+	bool restartRequest;
 
 	void mapReset();
 
